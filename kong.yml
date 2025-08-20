@@ -1,0 +1,59 @@
+_format_version: '3.0'
+
+plugins:
+  - name: cors
+    config:
+      origins:
+        - http://localhost:5173
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      headers:
+        - Accept
+        - Authorization
+        - Content-Type
+      credentials: true
+
+services:
+  - name: auth-service
+    url: http://host.docker.internal:5000
+
+  - name: goal-service
+    url: http://host.docker.internal:5001
+
+routes:
+  - name: auth-routes
+    service: auth-service
+    paths:
+      - /api/auth
+      - /api/users
+    strip_path: false
+
+  - name: goal-routes
+    service: goal-service
+    paths:
+      - /api/goals
+      - /api/targets
+      - /api/tasks
+      - /api/microtasks
+    strip_path: false
+    plugins:
+      - name: jwt-custom
+        config:
+          cookie_names:
+            - access_token
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+            - nbf
+          run_on_preflight: true
+
+consumers:
+  - username: generic-jwt-consumer
+    jwt_custom_secrets:
+      - key: 
+        secret: 
+        algorithm: 
