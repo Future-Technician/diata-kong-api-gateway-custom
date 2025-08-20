@@ -1,37 +1,33 @@
 version: '3.8'
 
-services:
-  kong-gateway:
-    image: kong:3.7
-    container_name: kong-gateway
-    restart: on-failure
-    
-    env_file:
-      - .env
-
-    volumes:
-      - ./kong.yml:/usr/local/kong/declarative/kong.yml:ro 
-      - ./kong-plugins/jwt-custom:/usr/local/share/lua/5.1/kong/plugins/jwt-custom:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      
-    environment:
-      KONG_DATABASE: 'off'
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
-      TZ: Asia/Jakarta
-      KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml' 
-      
-    ports:
-      - '5002:8000'
-      - '8001:8001'
-      
-    networks:
-      - kong-net
-
 networks:
-  kong-net:
-    driver: bridge
+    kong-net:
+        driver: bridge
+
+services:
+    kong-gateway:
+        image: kong:3.7
+        container_name: kong-gateway
+        restart: on-failure
+        env_file:
+            - .env
+        volumes:
+            - ./kong.yml:/usr/local/kong/declarative/kong.yml:ro
+            - ./kong-plugins/jwt-custom:/usr/local/share/lua/5.1/kong/plugins/jwt-custom:ro
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        environment:
+            KONG_DATABASE: 'off'
+            KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
+            KONG_PROXY_ACCESS_LOG: /dev/stdout
+            KONG_ADMIN_ACCESS_LOG: /dev/stdout
+            KONG_PROXY_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_LISTEN: 0.0.0.0:8001
+            TZ: Asia/Jakarta
+            KONG_PLUGINS: 'bundled,jwt-custom'
+        ports:
+            - '5002:8000'
+            - '8001:8001'
+        networks:
+            - kong-net
