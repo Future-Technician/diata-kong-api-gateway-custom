@@ -39,6 +39,7 @@ routes:
       - /api/targets
       - /api/tasks
       - /api/microtasks
+      - /api/difficulties
     strip_path: false
     plugins:
       - name: jwt-custom
