@@ -41,3 +41,5 @@ services:
     networks:
       - frontend_diata_admin
       - backend_diata_admin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

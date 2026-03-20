@@ -24,13 +24,13 @@ plugins:
 
 services:
   - name: auth-service
-    url: http://host.docker.internal:5000
+    url: http://be-auth-service:5000
 
   - name: goal-service
-    url: http://host.docker.internal:5001
+    url: http://be-goal-service:5001
 
   - name: finance-service
-    url: http://host.docker.internal:5004
+    url: http://be-finance-service:5004
 
 routes:
   - name: auth-routes
