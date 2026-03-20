@@ -5,6 +5,7 @@ plugins:
     config:
       origins:
         - http://localhost:5173
+        - https://admin.diata.my.id
       methods:
         - GET
         - POST
