@@ -4,7 +4,6 @@ plugins:
   - name: cors
     config:
       origins:
-        - http://localhost:5173
         - https://admin.diata.my.id
       methods:
         - GET
@@ -25,12 +24,22 @@ plugins:
 services:
   - name: auth-service
     url: http://be-auth-service:5000
-
+    connect_timeout: 5000
+    write_timeout: 5000
+    read_timeout: 5000
+    retries: 5
   - name: goal-service
     url: http://be-goal-service:5001
-
+    connect_timeout: 5000
+    write_timeout: 5000
+    read_timeout: 5000
+    retries: 5
   - name: finance-service
     url: http://be-finance-service:5004
+    connect_timeout: 5000
+    write_timeout: 5000
+    read_timeout: 5000
+    retries: 5
 
 routes:
   - name: auth-routes
