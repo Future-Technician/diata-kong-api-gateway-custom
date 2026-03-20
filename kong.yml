@@ -1,4 +1,4 @@
-_format_version: '3.0'
+_format_version: "3.0"
 
 plugins:
   - name: cors
@@ -15,6 +15,10 @@ plugins:
         - Accept
         - Authorization
         - Content-Type
+        - X-User-ID
+        - X-User-Name
+        - x-user-id
+        - x-user-name
       credentials: true
 
 services:
@@ -23,6 +27,9 @@ services:
 
   - name: goal-service
     url: http://host.docker.internal:5001
+
+  - name: finance-service
+    url: http://host.docker.internal:5004
 
 routes:
   - name: auth-routes
@@ -52,9 +59,25 @@ routes:
             - nbf
           run_on_preflight: true
 
+  - name: finance-routes
+    service: finance-service
+    paths:
+      - /api/finances
+    strip_path: false
+    plugins:
+      - name: jwt-custom
+        config:
+          cookie_names:
+            - access_token
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+            - nbf
+          run_on_preflight: true
+
 consumers:
   - username: generic-jwt-consumer
     jwt_custom_secrets:
-      - key: 
-        secret: 
-        algorithm: 
+      - key:
+        secret:
+        algorithm:
